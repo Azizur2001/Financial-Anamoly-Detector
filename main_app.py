@@ -1,5 +1,6 @@
 import streamlit as st
 from groq import Groq
+import numpy as np
 import os
 import pickle
 import pandas as pd
