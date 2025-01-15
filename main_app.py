@@ -46,6 +46,7 @@ def detect_anomalies(data, model, feature_names, threshold=0.5):
         else:
             raise ValueError("The model does not support probability predictions.")
 
+        # Use numpy's vectorized operations for faster computation
         anomaly_classes = (anomaly_probs >= threshold).astype(int)
 
         # Add predictions to the dataset
@@ -53,14 +54,13 @@ def detect_anomalies(data, model, feature_names, threshold=0.5):
         data["Anomaly_Flag"] = anomaly_classes
 
         # Add recommendations
-        data["Recommendation"] = data["Anomaly_Flag"].apply(lambda x: "Sell" if x == 1 else "Hold")
+        data["Recommendation"] = np.where(data["Anomaly_Flag"] == 1, "Sell", "Hold")
 
         st.write("Anomaly detection completed.")
         return data
     except Exception as e:
         st.error(f"An error occurred during anomaly detection: {e}")
         raise
-
 
 def main():
     st.title("Anomaly Detection with Groq-Powered Chatbot")
